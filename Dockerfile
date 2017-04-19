@@ -31,3 +31,5 @@ RUN pecl install xdebug \
     && echo 'alias sf="php app/console"' >> ~/.bashrc \
     && echo 'alias sf3="php bin/console"' >> ~/.bashrc \
     && echo 'alias mage="php bin/magento"' >> ~/.bashrc
+
+RUN usermod -u 1000 www-data
