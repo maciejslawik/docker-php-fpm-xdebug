@@ -23,6 +23,7 @@ RUN apt-get update && apt-get install -y \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
         libpng12-dev \
+        vim \
     && docker-php-ext-install -j$(nproc) iconv mcrypt \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd
@@ -44,6 +45,9 @@ RUN pecl install xdebug \
     && echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.remote_connect_back=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.remote_port=9000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.profiler_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.profiler_output_dir=/tmp/snapshots" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.profiler_enable_trigger=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo 'alias sf="php app/console"' >> ~/.bashrc \
     && echo 'alias sf3="php bin/console"' >> ~/.bashrc \
     && echo 'alias mage="php bin/magento"' >> ~/.bashrc
