@@ -35,6 +35,7 @@ RUN apt-get install zlib1g-dev libicu-dev g++ && \
 
 RUN apt-get install -y libxslt-dev
 RUN docker-php-ext-install xsl
+RUN docker-php-ext-install soap
 
 # Install xdebug
 RUN pecl install xdebug \
