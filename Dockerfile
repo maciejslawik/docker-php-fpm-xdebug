@@ -1,4 +1,4 @@
-FROM php:7.1-fpm
+FROM php:5.6-fpm
 
 MAINTAINER Maciej Slawik <maciekslawik@gmail.com>
 
