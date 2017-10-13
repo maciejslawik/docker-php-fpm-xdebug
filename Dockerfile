@@ -34,8 +34,7 @@ RUN apt-get install zlib1g-dev libicu-dev g++ && \
     apt-get purge -y g++
 
 RUN apt-get install -y libxslt-dev
-RUN docker-php-ext-install xsl
-RUN docker-php-ext-install soap
+RUN docker-php-ext-install xsl soap mysqli
 
 # Install xdebug
 RUN pecl install xdebug \
@@ -58,3 +57,6 @@ RUN usermod -u 1000 www-data
 # Add aliases for xdebug control
 RUN echo 'alias xoff="mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.off && kill -USR2 1"' >> ~/.bashrc
 RUN echo 'alias xon="mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.off /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && kill -USR2 1"' >> ~/.bashrc
+
+# Change memory limit
+RUN echo 'memory_limit = 2G ' >> /usr/local/etc/php/php.ini
