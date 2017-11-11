@@ -52,6 +52,17 @@ RUN pecl install xdebug \
     && echo 'alias sf3="php bin/console"' >> ~/.bashrc \
     && echo 'alias mage="php bin/magento"' >> ~/.bashrc
 
+# Install Redis extension
+RUN pecl install -o -f redis \
+    && rm -rf /tmp/pear \
+    && echo "extension=redis.so" > /usr/local/etc/php/conf.d/docker-php-ext-redis.ini
+
+# Install MongoDB extension
+RUN pecl install mongodb \
+    && rm -rf /tmp/pear \
+    && echo "extension=mongodb.so" >> /usr/local/etc/php/conf.d/docker-php-ext-mongodb.ini
+
+# Set ID
 RUN usermod -u 1000 www-data
 
 # Add aliases for xdebug control
