@@ -1,4 +1,4 @@
-# PHP7-FMP with xdebug #
+# PHP-FMP with xdebug #
 
-The repository stores an image of PHP-FPM (PHP 7.0, PHP 7.1) with preconfigured XDEBUG for local development.
+The repository stores an image of PHP-FPM (PHP 5.6, PHP 7.0, PHP 7.1) with preconfigured XDEBUG for local development.
 It can be easily linked with nginx web server.
