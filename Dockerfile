@@ -47,10 +47,7 @@ RUN pecl install xdebug \
     && echo "xdebug.remote_port=9000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.profiler_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.profiler_output_dir=/tmp/snapshots" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.profiler_enable_trigger=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo 'alias sf="php app/console"' >> ~/.bashrc \
-    && echo 'alias sf3="php bin/console"' >> ~/.bashrc \
-    && echo 'alias mage="php bin/magento"' >> ~/.bashrc
+    && echo "xdebug.profiler_enable_trigger=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Install Redis extension
 RUN pecl install -o -f redis \
@@ -86,3 +83,11 @@ RUN mkdir -p /tmp/blackfire \
     && curl -A "Docker" -L https://blackfire.io/api/v1/releases/client/linux_static/amd64 | tar zxp -C /tmp/blackfire \
     && mv /tmp/blackfire/blackfire /usr/bin/blackfire \
     && rm -Rf /tmp/blackfire
+
+
+# Add aliases for www-data user
+RUN touch /var/www/.bashrc && chown www-data /var/www/.bashrc
+USER www-data
+RUN echo 'alias sf="php app/console"' >> ~/.bashrc \
+    && echo 'alias sf3="php bin/console"' >> ~/.bashrc \
+    && echo 'alias mage="php bin/magento"' >> ~/.bashrc
