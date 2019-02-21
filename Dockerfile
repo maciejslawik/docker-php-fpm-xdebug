@@ -47,10 +47,7 @@ RUN pecl install xdebug-2.7.0beta1 \
     && echo "xdebug.remote_port=9000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.profiler_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.profiler_output_dir=/tmp/snapshots" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.profiler_enable_trigger=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo 'alias sf="php app/console"' >> ~/.bashrc \
-    && echo 'alias sf3="php bin/console"' >> ~/.bashrc \
-    && echo 'alias mage="php bin/magento"' >> ~/.bashrc
+    && echo "xdebug.profiler_enable_trigger=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Install Redis extension
 RUN pecl install -o -f redis \
@@ -72,17 +69,25 @@ RUN echo 'alias xon="mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.off 
 # Change memory limit
 RUN echo 'memory_limit = 2G ' >> /usr/local/etc/php/php.ini
 
-## Install Blackfire probe - no version for 7.3 available yet
-#RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
-#    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/$version \
-#    && mkdir -p /tmp/blackfire \
-#    && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp/blackfire \
-#    && mv /tmp/blackfire/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so \
-#    && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/docker-php-ext-blackfire.ini \
-#    && rm -rf /tmp/blackfire /tmp/blackfire-probe.tar.gz
-#
-## Install Blackfire CLI executable
-#RUN mkdir -p /tmp/blackfire \
-#    && curl -A "Docker" -L https://blackfire.io/api/v1/releases/client/linux_static/amd64 | tar zxp -C /tmp/blackfire \
-#    && mv /tmp/blackfire/blackfire /usr/bin/blackfire \
-#    && rm -Rf /tmp/blackfire
+# Install Blackfire probe - no version for 7.3 available yet
+RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
+    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/$version \
+    && mkdir -p /tmp/blackfire \
+    && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp/blackfire \
+    && mv /tmp/blackfire/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so \
+    && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/docker-php-ext-blackfire.ini \
+    && rm -rf /tmp/blackfire /tmp/blackfire-probe.tar.gz
+
+# Install Blackfire CLI executable
+RUN mkdir -p /tmp/blackfire \
+    && curl -A "Docker" -L https://blackfire.io/api/v1/releases/client/linux_static/amd64 | tar zxp -C /tmp/blackfire \
+    && mv /tmp/blackfire/blackfire /usr/bin/blackfire \
+    && rm -Rf /tmp/blackfire
+
+
+# Add aliases for www-data user
+RUN touch /var/www/.bashrc && chown www-data /var/www/.bashrc
+USER www-data
+RUN echo 'alias sf="php app/console"' >> ~/.bashrc \
+    && echo 'alias sf3="php bin/console"' >> ~/.bashrc \
+    && echo 'alias mage="php bin/magento"' >> ~/.bashrc
