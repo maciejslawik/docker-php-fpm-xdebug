@@ -30,7 +30,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN apt-get install -y zlib1g-dev libicu-dev g++ && \
     docker-php-ext-configure intl && \
-    docker-php-ext-install intl zip && \
+    docker-php-ext-install intl zip sockets && \
     apt-get purge -y g++
 
 RUN apt-get install -y libxslt-dev
