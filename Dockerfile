@@ -3,7 +3,7 @@ FROM php:7.2-fpm
 MAINTAINER Maciej Slawik <maciekslawik@gmail.com>
 
 RUN apt-get update && apt-get install -y \
-    unzip
+    unzip wget
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
@@ -84,6 +84,14 @@ RUN mkdir -p /tmp/blackfire \
     && mv /tmp/blackfire/blackfire /usr/bin/blackfire \
     && rm -Rf /tmp/blackfire
 
+# Install newer libsodium
+RUN wget https://download.libsodium.org/libsodium/releases/libsodium-1.0.18.tar.gz \
+        && tar xfvz libsodium-1.0.18.tar.gz \
+        && cd libsodium-1.0.18 \
+        && ./configure \
+        && make && make install \
+        && pecl install -f libsodium
+RUN docker-php-ext-install sodium
 
 # Add aliases for www-data user
 RUN touch /var/www/.bashrc && chown www-data /var/www/.bashrc
