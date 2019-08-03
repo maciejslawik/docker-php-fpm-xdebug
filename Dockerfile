@@ -95,6 +95,10 @@ RUN docker-php-ext-install sodium
 
 # Add aliases for www-data user
 RUN touch /var/www/.bashrc && chown www-data /var/www/.bashrc
+
+# Create cache dir for composer
+RUN mkdir /var/www/.composer && chown www-data /var/www/.composer
+
 USER www-data
 RUN echo 'alias sf="php app/console"' >> ~/.bashrc \
     && echo 'alias sf3="php bin/console"' >> ~/.bashrc \
