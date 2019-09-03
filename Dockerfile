@@ -99,6 +99,12 @@ RUN touch /var/www/.bashrc && chown www-data /var/www/.bashrc
 # Create cache dir for composer
 RUN mkdir /var/www/.composer && chown www-data /var/www/.composer
 
+# Install ssmtp
+RUN apt-get update && \
+    apt-get install -y -q --no-install-recommends ssmtp && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 USER www-data
 RUN echo 'alias sf="php app/console"' >> ~/.bashrc \
     && echo 'alias sf3="php bin/console"' >> ~/.bashrc \
