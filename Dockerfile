@@ -109,3 +109,13 @@ USER www-data
 RUN echo 'alias sf="php app/console"' >> ~/.bashrc \
     && echo 'alias sf3="php bin/console"' >> ~/.bashrc \
     && echo 'alias mage="php bin/magento"' >> ~/.bashrc
+
+# Frontend tools
+RUN apt-get install -y curl gpgv
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
+RUN apt-get install -y nodejs
+
+RUN mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.off
+
+USER www-data
+RUN npm install -g grunt-cli
