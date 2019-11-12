@@ -100,9 +100,9 @@ RUN touch /var/www/.bashrc && chown www-data /var/www/.bashrc
 # Create cache dir for composer
 RUN mkdir /var/www/.composer && chown www-data /var/www/.composer
 
-# Install ssmtp
+# Install msmtp
 RUN apt-get update && \
-    apt-get install -y -q --no-install-recommends ssmtp && \
+    apt-get install -y -q --no-install-recommends msmtp && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -113,5 +113,7 @@ RUN apt-get install -y nodejs
 
 RUN mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.off
 
-USER www-data
+RUN chown -R www-data:www-data /var/www
+
 RUN npm install -g grunt-cli
+USER www-data
