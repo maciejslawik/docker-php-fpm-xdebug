@@ -43,7 +43,7 @@ RUN pecl install xdebug \
     && echo "display_startup_errors = On" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "display_errors = On" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.remote_connect_back=0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_connect_back=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.remote_port=9000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.profiler_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.profiler_output_dir=/tmp/snapshots" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
@@ -100,11 +100,11 @@ RUN touch /var/www/.bashrc && chown www-data /var/www/.bashrc
 # Create cache dir for composer
 RUN mkdir /var/www/.composer && chown www-data /var/www/.composer
 
-# Install msmtp
-RUN apt-get update && \
-    apt-get install -y -q --no-install-recommends msmtp && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+#Install mailhog
+RUN wget https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64
+RUN chmod +x mhsendmail_linux_amd64
+RUN mv mhsendmail_linux_amd64 /usr/local/bin/mhsendmail
+RUN echo "sendmail_path = \"/usr/local/bin/mhsendmail --smtp-addr='mailhog:1025'\"" >> /usr/local/etc/php/conf.d/docker-php-ext-mailhog.ini
 
 # Frontend tools
 RUN apt-get install -y curl gpgv
