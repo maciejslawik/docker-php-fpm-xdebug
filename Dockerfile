@@ -37,7 +37,7 @@ RUN apt-get install -y libxslt-dev
 RUN docker-php-ext-install xsl soap mysqli
 
 # Install xdebug
-RUN pecl install xdebug-2.8.1 \
+RUN pecl install xdebug-2.9.1 \
     && docker-php-ext-enable xdebug \
     && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "display_startup_errors = On" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
