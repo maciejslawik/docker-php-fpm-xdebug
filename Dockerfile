@@ -6,8 +6,10 @@ RUN apt-get update && apt-get install -y \
     unzip wget
 
 # Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && composer --version
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php composer-setup.php --version=1.10.21 \ 
+    && php -r "unlink('composer-setup.php');" \
+    && mv composer.phar /usr/local/bin/composer;
 
 # Set timezone
 RUN rm /etc/localtime \
@@ -86,7 +88,7 @@ RUN mkdir -p /tmp/blackfire \
     && rm -Rf /tmp/blackfire
 
 # Install newer libsodium
-RUN wget https://download.libsodium.org/libsodium/releases/libsodium-1.0.18.tar.gz \
+RUN curl https://download.libsodium.org/libsodium/releases/libsodium-1.0.18.tar.gz > libsodium-1.0.18.tar.gz \
         && tar xfvz libsodium-1.0.18.tar.gz \
         && cd libsodium-1.0.18 \
         && ./configure \
